@@ -60,6 +60,56 @@ Select e3.ename as 'Employee',e4.ename as 'Manager' from Employes e3,Employes e4
 
 select e1.ename as 'employee',e2.ename as 'manager' from Employes e1,Employes e2 where e1.Manager_id=e2.emp_id
 
+Select ename,salary from Employes where salary>25000
+Select * from Employes
+select top 1 ename,salary from  Employes order by salary desc
 
+Select e.salary from Employes e join Depart d on e.did=d.did where d.d_name='testing'
 
+Select * from Employes
 
+select * from Depart
+
+select * from Employes e join Depart d on  e.did=d.did where d.d_location='akurdi' and salary>25000 
+
+Select * from Employes e left join Depart d on e.did=d.did where d.d_name is null
+
+----------------------------------------------Having Clouse---------------------
+select did,count(emp_id) as 'EmpCount' from Employes group by did
+select did,sum (salary) from Employes group by did
+select did,avg (salary) from Employes group by did
+
+----------------------------------------------Sub Query----------------------------
+--find the max salary in employee table
+
+select max (salary) as  'MaxSal' from Employes
+-- display the emp details who has max salary in emp table
+--outer query                            inner/ subquery
+select * from Employes where salary=(select max (salary) as  'MaxSal' from Employes)
+-- display emp details who work in HR dept
+select * from Employes where did=(
+select did from Depart where d_name='Hr')
+-- display emp details who has less salary than Rahul
+select * from Employes where salary<(
+select salary from Employes where ename='puja')
+-- display the emp details who has less salary than the avg salary of all emps
+select * from Employes where salary<(
+select AVG(salary) from Employes)
+--display the emp from dev dept who has less salary then the 
+--avg salary of admin dept
+select * from Employes where salary=(
+select AVG(salary) from Employes where did=(select did from Depart where d_name='hr') and did=(select did from Depart where d_name='testing'))
+-- display the emp details who has 2nd highest salary
+select * from Employes where salary=(
+select MAX(salary) from Employes where salary<>(select max (salary)from Employes ))
+
+------------------------------------Update -------------
+-- update the salary by 2000rs for emp who work in hr dept
+update Employes set salary=salary+2000 where did in(
+select did from Depart where d_name='hr')
+Select * from Employes
+select * from Depart
+--------------------------& Delete---------------------------------
+-- delete the emp who work in sale dept
+delete from Employes where did in(
+select did from Depart where d_name='sales')

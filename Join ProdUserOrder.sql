@@ -27,5 +27,16 @@ Insert Into Orders Values(1117,2,102,78)
 Insert Into Orders Values(1118,1,101,89)
 
 Select * from Orders
+Select * from User1
 
 Select o.Order_id,o.Prod_id,o.Quantity,p.Prod_Name,p.Prod_Price from Orders o full join Product p on p.Prod_id=o.Prod_id
+
+select user_id,count(Order_id) from Orders group by user_id
+
+
+--Select course,count(sid) as 'count' from student group by course
+-- select coursename,count(sid) as 'cout' from student  where coursename='c#' group by coursename
+--select coursename,count(sid) as 'count' from student group by coursename having count(sid)>10
+-- Select coursename,sum(fees) from student group by cousename 
+--Select courcname,count(sid) from student group by courscename having count(sid<15) oder by count(sid) desc 
+
