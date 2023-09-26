@@ -45,7 +45,7 @@ Select * from Patientt where Height between 4 and 5
 update  patientt set allergies='NKS' where allergies is null
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --6.Show how many patients have birth year is 1998
-Select * from Patientt where year(Birth_Date)=1998
+Select count(Patient_id) as 'count' from Patientt where year(Birth_Date)='1998' 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --7.	Show the patients details who have greatest height
 select * from Patientt where height=(select max(Height) from Patientt)

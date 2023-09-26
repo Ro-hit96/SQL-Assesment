@@ -1,4 +1,4 @@
-Create Table Depart(did int Primary Key, d_name varchar(20),d_location varchar(20))
+﻿Create Table Depart(did int Primary Key, d_name varchar(20),d_location varchar(20))
 Insert Into Depart Values(1,'HR','Pune')
 Insert Into Depart Values(2,'Sales','Mumbai')
 Insert Into Depart Values(3,'Development','NalStop')
@@ -113,3 +113,114 @@ select * from Depart
 -- delete the emp who work in sale dept
 delete from Employes where did in(
 select did from Depart where d_name='sales')
+------------------------------View---------------------------------
+
+ Select * from Employes
+select * from Depart
+
+Create view Emo_Mang_ID as
+Select * from Employes where Manager_id=110
+Select * from Emo_Mang_ID
+--------------------------------------------------------------
+Create view Emp_DiD_HR as
+Select ename,salary,Manager_id from Employes where did=(select did from Depart  where d_name='hr')
+Select * from Emp_DiD_HR
+-------------------------------------------------------------------------------------------------------
+alter view Emp_DiD_HR as
+Select ename,salary from Employes where did=(select did from Depart  where d_name='hr')
+Select * from Emp_DiD_HR
+--------------------------------------------------------------------------------
+Drop view Emp_DiD_HR
+---------------------------------------------------------------------------------------------
+------------------------------------------Store Procedure-----------------------------------------------
+--create procedure:-
+--create proc SP_Emp_select
+--as begin
+--return
+--end
+Create Proc SP_Emp_Select as begin select * from Employes return end
+-- call the SP
+exec SP_Emp_Select
+------------------------------------------------------------
+-- with parameters
+create proc sp_Emp_EName(@ename varchar(20)) as begin select  * from Employes where Ename=@ename return end
+--Call the SP
+exec sp_Emp_EName @ename='Puja'
+---------------------------------------------------------------------------------------------------------------------
+---------------------------------------DML--------------------------------------------------------------------------
+Create proc SP_Insert_Emp
+(@emp_id int,@ename varchar(20),@salary int,@did int,@Manager_id int) as begin
+insert into Employes values(@emp_id,@ename,@salary,@did,@Manager_id) return end
+
+exec SP_Insert_Emp @emp_id=111,@ename='Saniya',@salary=984949,@did=1,@Manager_id=112
+
+exec SP_Insert_Emp @emp_id=116,@ename='Alisha',@salary=647647,@did=3,@Manager_id=113
+--Update
+Create proc sp_updates_name (@ename varchar(20),@emp_id int) as begin update Employes set ename=@ename where emp_id=@emp_id return end
+exec sp_updates_name @ename='sandesh',@emp_id=102
+Select * from Employes
+--Delete
+Create proc Sp_Delete_emp (@emp_id int) as begin delete from Employes where emp_id=@emp_id return end
+ exec Sp_Delete_emp @emp_id=111
+
+
+-----------------------------------------Identity------------------------------------------------------------
+--Function in SQL Two types Built in function User defined functions 
+--Built in functions → aggregate function (max,min,count,sum,avg), len,concat, substring, getdate, day,month,year cast…User defined functions User defined function has 2 types
+--Scalar function  → if function returns single value then it is called as scalar function
+--Multi value function → if function returns multiple column values / result set / table that function is called as multi value function
+
+Create Table Product1(id int primary key identity(1001,1), Pro_Name Varchar(20),price int)
+Insert Into Product1 Values('Pencil',20)
+Insert Into Product1 values('pen',10),('Rubber',5),('Cap',1000),('Remote','200')
+
+Select * from Product1
+
+--------------------------------------Trigger--------------------------------------------
+Select * from Employes
+
+select * from Depart
+Create Table EmployeeTrack(id int primary key identity (1,1),description varchar(266)) 
+
+Create Trigger tr_Employe on
+Employes after insert 
+as begin 
+declare @emp_id int
+Declare @ename varchar(20)
+Declare @salary int
+select @emp_id=emp_id,@ename=ename,@salary=salary from inserted
+insert into EmployeeTrack values('New Record with detail'+cast(@emp_id as varchar)+
+'name'+@ename+'salary'+CAST(@salary as varchar(20))+'Added') end
+
+Insert into Employes values(110,'ShubhanDj',100000,1,111)
+Select * from Employes
+Select * from EmployeeTrack
+-----------------------------------------Delete ------------------------------------------------------
+Create Trigger Tr_emp_Delete on
+Employes after delete as begin
+declare @emp_id int
+declare @ename varchar(20)
+declare @salary int
+select @emp_id=emp_id,@ename=ename,@salary=salary from deleted
+Insert into EmployeeTrack values('Record With details'+cast(@emp_id as varchar)+
+'name'+@ename+'salary'+CAST(@salary as varchar(20))+'removed') end
+
+--------------------------------------------Case------------------------------------
+Select * from Product1
+
+Select pro_Name,price,
+case
+when price >300 then 'Expensive'
+when price<300 then 'not expensive'
+else 'Average'
+end as 'remark'
+from product1
+-----------------------------------Emp
+Select emp_id,ename, salary,manager_id,
+case
+when salary >40000 and salary < 90000 then 'high Salary'
+when salary>250000 and salary<40000 then 'Avg Salary'
+else 'Low Salary'
+end as 'Salary Remark'
+from Employes
+------------------------------------------------------
